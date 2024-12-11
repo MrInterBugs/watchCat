@@ -61,5 +61,9 @@ class Main:
 
 if __name__ == "__main__":
     main = Main()
-    #main.run()
+
+    # Check if RUN_ON_STARTUP environment variable is set to "true"
+    if os.getenv("RUN_ON_STARTUP", "false").lower() == "true":
+        main.run()
+
     main.loop()

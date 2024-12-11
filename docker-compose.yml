@@ -9,6 +9,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       - TZ=Europe/Zurich
+      - RUN_ON_STARTUP=true
     labels:
       - "watchCat=True"
       - "watchCat.group=default"
