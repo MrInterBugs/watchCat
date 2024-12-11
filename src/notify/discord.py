@@ -27,7 +27,7 @@ class DiscordNotify:
         for group in self.configMap:
             groupHasContainer = False
             #set webhook
-            webhook = DiscordWebhook(url=self.configMap[group]["url"], content=self.configMap[group]["onUpdate"])
+            webhook = DiscordWebhook(url=self.configMap[group]["url"], content=self.configMap[group].get("onUpdate", ""))
             embed = DiscordEmbed(title=f'update available!', color='03b2f8')
 
             for container in self.containerList:
