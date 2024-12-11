@@ -22,6 +22,8 @@ Tired of checking if your docker containers are up to date manually? Watch cat c
     wget https://raw.githubusercontent.com/Salero-tech/watchCat/main/docker-compose.yml
     ```
 
+    Optionally set the value of `RUN_ON_STARTUP` to true to enable run on startup. 
+
  2. create config folder & download config file [example config](examples/config.yml)
     ```bash
     mkdir config && cd config && wget https://raw.githubusercontent.com/Salero-tech/watchCat/main/src/config/config.yml
