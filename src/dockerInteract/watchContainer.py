@@ -32,18 +32,35 @@ class WatchContainer:
         img = self.container.image
         return img.tags[0]
 
-    def isUpdateAvilable (self) -> bool:
-        #local img
+    def isUpdateAvailable(self) -> bool:
+        # Local image
         img = self.container.image
-        repoIdLocal = img.attrs["RepoDigests"][0].split("@")[1]
 
-        #remote img
-        imgReg = self.client.images.get_registry_data(self.imageName)
-        repoId = imgReg.id
+        # Check if the local image has RepoDigests
+        repo_digests = img.attrs.get("RepoDigests")
+        if not repo_digests:
+            # No RepoDigests means the image is likely built locally
+            self.update = False
+            return self.update
 
-        #is update available
-        self.update = repoId != repoIdLocal
+        # Check if the image has tags
+        if not img.tags:
+            self.update = False
+            return self.update
+
+        repo_id_local = repo_digests[0].split("@")[1]
+
+        # Remote image
+        try:
+            img_reg = self.client.images.get_registry_data(self.imageName)
+            repo_id_remote = img_reg.id
+        except Exception as e:
+            # Handle exceptions when fetching remote data
+            raise RuntimeError(f"Failed to fetch registry data for image {self.imageName}: {e}")
+
+        # Check if update is available
+        self.update = repo_id_remote != repo_id_local
         return self.update
 
     def __str__ (self):
-        return f"{self.name}, {self.idShort}, {self.isUpdateAvilable()}"
+        return f"{self.name}, {self.idShort}, {self.isUpdateAvailable()}"

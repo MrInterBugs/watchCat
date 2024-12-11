@@ -27,7 +27,7 @@ class WatchCat:
         updatableContainers = []
 
         for container in self.monitoredContainers:
-            if container.isUpdateAvilable():
+            if container.isUpdateAvailable():
                 updatableContainers.append(container)
         
         return updatableContainers
