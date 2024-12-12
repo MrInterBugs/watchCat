@@ -10,12 +10,12 @@ class WatchCat:
         self.client = docker.DockerClient(base_url='unix://var/run/docker.sock')
 
     def getMonitoredContainers (self):
-        #get all containers
+        # Get all containers
         allContainers = self.client.containers.list()
 
-        #filter monitored containers
+        # Filter monitored containers
         for container in allContainers:
-            #does contain key application name
+            # Does contain key application name
             labels = container.labels
             if not (APPLICATION_NAME in labels.keys()):
                 continue
