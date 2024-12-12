@@ -28,14 +28,14 @@ class DiscordNotify:
             groupHasContainer = False
             # Set webhook
             webhook = DiscordWebhook(url=self.configMap[group]["url"], content=self.configMap[group].get("onUpdate", ""))
-            embed = DiscordEmbed(title=f'update available!', color='03b2f8')
+            embed = DiscordEmbed(title=f'Update available!', color='03b2f8')
 
             for container in self.containerList:
                 # Check group
                 if group in container.groups:
-                    embed.add_embed_field(name='name', value=container.name)
-                    embed.add_embed_field(name='id', value=container.idShort)
-                    embed.add_embed_field(name='image', value=container.imageName)
+                    embed.add_embed_field(name='Name:', value=container.name)
+                    embed.add_embed_field(name='ID:', value=container.idShort)
+                    embed.add_embed_field(name='Image:', value=container.imageName)
                     
                     groupHasContainer = True
 
