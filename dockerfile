@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /usr/src/
 
 COPY src/requirements.txt ./requirements.txt
-RUN python3 -m pip install --root-user-action=ignore --upgrade pip && \
+RUN python3 -m pip install --root-user-action=ignore --no-cache-dir --upgrade pip && \
     python3 -m pip install --root-user-action=ignore --no-cache-dir -r requirements.txt
 
 COPY src/ ./
