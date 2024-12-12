@@ -1,4 +1,3 @@
-version: '3'
 services:
   watchCat:
     image: salero33/watchcat:latest

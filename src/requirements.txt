@@ -1,4 +1,6 @@
-docker
-discord-webhook
-pyyaml
-schedule
+docker           == 7.1.0
+discord-webhook  == 1.3.1
+pyyaml           == 6.0.2
+schedule         == 1.2.2
+requests         == 2.32.3
+urllib3          == 2.2.3
