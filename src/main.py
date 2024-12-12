@@ -5,6 +5,7 @@ import schedule
 import time
 import yaml
 import os
+import logging
 
 CONFIG_FILE_PATH = '/usr/src/config/config.yml'
 
@@ -12,54 +13,63 @@ class Main:
     def __init__(self) -> None:
         self.loadConfigFile()
 
-        #set up scheduel for running periodically
+        # Set up schedule for running periodically
         schedule.every(self.configInterval["every"]).day.at(self.configInterval["time"]).do(self.run)
     
-    def loop (self):
+    def loop(self):
         while True:
             schedule.run_pending()
-            #sleep until next job
+            # Sleep until next job
             time.sleep(schedule.idle_seconds())
-            #reload config
+            # Reload config
             self.loadConfigFile()
 
-    def loadConfigFile (self):
-        #check if config file exists
+    def loadConfigFile(self):
+        # Check if config file exists
         if not os.path.exists(CONFIG_FILE_PATH):
-            exit("config file not found")
+            logging.error("Config file not found at %s", CONFIG_FILE_PATH)
+            exit(1)
 
-        #load yml config
-        file = open(CONFIG_FILE_PATH)
-        self.config = yaml.safe_load(file)
-        file.close()
-    
-    def run (self):
-        print("start scan now")
-        #version check of containers
+        # Load YAML config
+        with open(CONFIG_FILE_PATH, 'r') as file:
+            self.config = yaml.safe_load(file)
+        logging.info("Configuration file loaded successfully.")
+
+    def run(self):
+        logging.info("Starting scan now.")
+        # Version check of containers
         cat = WatchCat()
         cat.getMonitoredContainers()
-        updatbleList:list[WatchContainer] = cat.getContainersWithUpdates()
+        updatableList: list[WatchContainer] = cat.getContainersWithUpdates()
 
-        #all containers up to date?
-        if len(updatbleList) == 0:
-            print("no containers to update")
+        # All containers up to date?
+        if len(updatableList) == 0:
+            logging.info("No containers to update.")
             return
 
-        print("sending notifications")
-        #notify for updates
+        logging.info("Sending notifications.")
+        # Notify for updates
         notify = Notify(self.configNotify)
-        notify.sendNotifications(updatbleList)
+        notify.sendNotifications(updatableList)
 
-    #data
+    # Data
     @property
-    def configNotify (self):
+    def configNotify(self):
         return self.config["notification"]
+
     @property
-    def configInterval (self):
+    def configInterval(self):
         return self.config["interval"]
 
 
 if __name__ == "__main__":
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+
     main = Main()
 
     # Check if RUN_ON_STARTUP environment variable is set to "true"
