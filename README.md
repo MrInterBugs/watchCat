@@ -25,15 +25,15 @@ Tired of checking if your docker containers are up to date manually? Watch cat c
 
     Optionally set the value of the environment variable `RUN_ON_STARTUP` to true to enable run on startup. 
 
- 2. Create config folder & download config file [example config](examples/config.yml)
+ 2. Create config folder & download config file [example config](examples/config.yml):
 
     ```bash
     mkdir config && cd config && wget https://raw.githubusercontent.com/Salero-tech/watchCat/main/src/config/config.yml
     ```
 
- 3. Edit the config file for your preferred update cycle
-    - **every** specifies the interval of days
-    - **time** is the time of day the update check runs
+ 3. Edit the config file for your preferred update cycle;
+    - **every** specifies the interval of days.
+    - **time** is the time of day the update check runs.
 
     ```yml
     interval:
@@ -42,9 +42,9 @@ Tired of checking if your docker containers are up to date manually? Watch cat c
     ```
 
  4. To setup your notification:
-    - [organzie notifications in groups](docs/group.md)
-    - [discord](docs/discord.md)
-    - [mail](docs/mail.md)
+    - [Organize notifications in groups](docs/group.md)
+    - [Discord](docs/discord.md)
+    - [Mail](docs/mail.md)
 
  5. Add container to be monitored (if no group is specified the container is added to group "default"; [more details](docs/group.md)): <br>
     docker-compose [examples](examples/docker-compose.yml):
