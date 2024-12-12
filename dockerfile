@@ -1,10 +1,13 @@
 FROM python:alpine
 
-RUN mkdir -p /usr/
-WORKDIR /usr/src/
-COPY src/requirements.txt ./requirements.txt
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-RUN python3 -m pip install -r requirements.txt
+WORKDIR /usr/src/
+
+COPY src/requirements.txt ./requirements.txt
+RUN python3 -m pip install --root-user-action=ignore --upgrade pip && \
+    python3 -m pip install --root-user-action=ignore --no-cache-dir -r requirements.txt
 
 COPY src/ ./
 
