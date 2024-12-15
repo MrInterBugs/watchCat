@@ -8,8 +8,12 @@ class WatchCat:
 
     def __init__(self) -> None:
         self.client = docker.DockerClient(base_url='unix://var/run/docker.sock')
+        self.monitoredContainers = []
 
     def getMonitoredContainers (self):
+        # Clear previous list before populating
+        self.monitoredContainers = []
+        
         # Get all containers
         allContainers = self.client.containers.list()
 
