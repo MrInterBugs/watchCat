@@ -24,6 +24,11 @@ class DiscordNotify:
                 logging.warning("No Discord configurations available. Cannot add container.")
                 return
 
+            # Check for duplicate container by ID
+            if any(c.idShort == container.idShort for c in self.containerList):
+                logging.debug(f"Container '{container.name}' already in the list. Skipping.")
+                return
+
             self.containerList.append(container)
             logging.debug(f"Container '{container.name}' added to the list.")
         except Exception as e:
@@ -72,5 +77,10 @@ class DiscordNotify:
                         logging.error(f"Error sending webhook for group '{group}': {e}")
                 else:
                     logging.debug(f"No containers found for group '{group}'. Skipping webhook send.")
+            
+            # Clear the container list after sending notifications
+            self.containerList = []
+
         except Exception as e:
             logging.error(f"Error in send method: {e}")
+            
