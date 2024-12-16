@@ -2,26 +2,27 @@ import smtplib
 from dockerInteract.watchContainer import WatchContainer
 from email.mime.text import MIMEText
 
-class MailNotify:
-    configMap:map = {}
-    containerList:list[str] = []
 
-    def __init__(self, config:map) -> None:
+class MailNotify:
+    configMap: map = {}
+    containerList: list[str] = []
+
+    def __init__(self, config: map) -> None:
         for groupName in config:
-            if not ('mail' in config[groupName].keys()):
+            if not ("mail" in config[groupName].keys()):
                 return
             self.configMap[groupName] = config[groupName]["mail"]
 
-    def addContainer (self, container:WatchContainer):
+    def addContainer(self, container: WatchContainer):
         # If no mail return
         if self.configMap == {}:
             return
-        
+
         self.containerList.append(container)
 
-    def generateHtml (self, htmlListItems:list):
-            
-            return f"""
+    def generateHtml(self, htmlListItems: list):
+
+        return f"""
                 <html lang="en">
                 <head>
                     <meta charset="UTF-8">
@@ -61,12 +62,11 @@ class MailNotify:
                 </html>
                 """
 
-
-    def send (self):
+    def send(self):
         # If no mail return
         if self.configMap == {}:
             return
-        
+
         htmlListItems = []
 
         # If group setup for mail send mail
@@ -76,33 +76,37 @@ class MailNotify:
             for container in self.containerList:
                 # Check group
                 if group in container.groups:
-                   groupHasContainer = True
-                   htmlListItems.append(f"""
+                    groupHasContainer = True
+                    htmlListItems.append(
+                        f"""
                     <tr>
                         <td>{container.name}</td>
                         <td>{container.idShort}</td>
                         <td>{container.imageName}</td>
                     </tr>
-                    """)
-                    
-            
+                    """
+                    )
+
             print(self.configMap[group])
             if groupHasContainer:
                 # Set variables
                 fromMail = f"Watch Cat <{self.configMap[group]['from_mail']}>"
                 toMail = self.configMap[group]["to_mail"]
-                
 
                 # Create html msg
                 html = self.generateHtml(htmlListItems)
                 msg = MIMEText(html, "html")
-                msg['from'] = fromMail
-                msg['to'] = ", ".join(toMail)
-                msg['subject'] = "docker updates"
+                msg["from"] = fromMail
+                msg["to"] = ", ".join(toMail)
+                msg["subject"] = "docker updates"
 
                 # Set smtp connection
-                smtpServer = smtplib.SMTP(self.configMap[group]["host"], self.configMap[group]["port"])
-                smtpServer.login(self.configMap[group]["user"], self.configMap[group]["passwd"])
+                smtpServer = smtplib.SMTP(
+                    self.configMap[group]["host"], self.configMap[group]["port"]
+                )
+                smtpServer.login(
+                    self.configMap[group]["user"], self.configMap[group]["passwd"]
+                )
 
                 # Send msg
                 smtpServer.sendmail(fromMail, toMail, msg.as_string())

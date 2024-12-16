@@ -7,15 +7,18 @@ import yaml
 import os
 import logging
 
-CONFIG_FILE_PATH = '/usr/src/config/config.yml'
+CONFIG_FILE_PATH = "/usr/src/config/config.yml"
+
 
 class Main:
     def __init__(self) -> None:
         self.loadConfigFile()
 
         # Set up schedule for running periodically
-        schedule.every(self.configInterval["every"]).day.at(self.configInterval["time"]).do(self.run)
-    
+        schedule.every(self.configInterval["every"]).day.at(
+            self.configInterval["time"]
+        ).do(self.run)
+
     def loop(self):
         while True:
             schedule.run_pending()
@@ -31,7 +34,7 @@ class Main:
             exit(1)
 
         # Load YAML config
-        with open(CONFIG_FILE_PATH, 'r') as file:
+        with open(CONFIG_FILE_PATH, "r") as file:
             self.config = yaml.safe_load(file)
         logging.info("Configuration file loaded successfully.")
 
@@ -68,7 +71,7 @@ if __name__ == "__main__":
     logging.basicConfig(
         level=logging.DEBUG if verbose else logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
 
     main = Main()
