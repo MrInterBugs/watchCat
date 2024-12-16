@@ -15,12 +15,12 @@ class WatchContainer:
     @property
     def groups (self):
         labels = self.container.labels
-        #check if any group specified if not return default
+        # Check if any group specified if not return default
         if not "watchCat.group" in labels:
             return ["default"]
         
-        #if specified return groups specified
-        #convert to list
+        # If specified return groups specified
+        # Convert to list
         return self.container.labels["watchCat.group"].split(" ")
 
     @property

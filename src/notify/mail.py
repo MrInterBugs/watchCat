@@ -13,7 +13,7 @@ class MailNotify:
             self.configMap[groupName] = config[groupName]["mail"]
 
     def addContainer (self, container:WatchContainer):
-        #if no mail return
+        # If no mail return
         if self.configMap == {}:
             return
         
@@ -63,18 +63,18 @@ class MailNotify:
 
 
     def send (self):
-        #if no mail return
+        # If no mail return
         if self.configMap == {}:
             return
         
         htmlListItems = []
 
-        #if group setup for mail send mail
+        # If group setup for mail send mail
         for group in self.configMap:
             groupHasContainer = False
 
             for container in self.containerList:
-                #check group
+                # Check group
                 if group in container.groups:
                    groupHasContainer = True
                    htmlListItems.append(f"""
@@ -88,22 +88,22 @@ class MailNotify:
             
             print(self.configMap[group])
             if groupHasContainer:
-                #set variables
+                # Set variables
                 fromMail = f"Watch Cat <{self.configMap[group]['from_mail']}>"
                 toMail = self.configMap[group]["to_mail"]
                 
 
-                #create html msg
+                # Create html msg
                 html = self.generateHtml(htmlListItems)
                 msg = MIMEText(html, "html")
                 msg['from'] = fromMail
                 msg['to'] = ", ".join(toMail)
                 msg['subject'] = "docker updates"
 
-                #set smtp connection
+                # Set smtp connection
                 smtpServer = smtplib.SMTP(self.configMap[group]["host"], self.configMap[group]["port"])
                 smtpServer.login(self.configMap[group]["user"], self.configMap[group]["passwd"])
 
-                #send msg
+                # Send msg
                 smtpServer.sendmail(fromMail, toMail, msg.as_string())
                 smtpServer.quit()

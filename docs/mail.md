@@ -13,7 +13,7 @@ mail:
 ```
  - **host**: SMTP-server host
  - **port**: SMTP port default: 587
- - **user**: user used to log in (probebly your email)
+ - **user**: user used to log in (probably your email)
  - **passwd**: password used to login
  - **from_mail**: email which is used to send email notification
  - **to_mail**: a list of emails which will receive the notification

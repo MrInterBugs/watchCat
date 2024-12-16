@@ -1,15 +1,15 @@
-version: '3'
 services:
   watchCat:
     image: salero33/watchcat:latest
     container_name: watchCat
     restart: unless-stopped
     volumes:
-      - ./config:/usr/src/config/
+      - ./config:/usr/src/config:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       - TZ=Europe/Zurich
       - RUN_ON_STARTUP=false
+      - VERBOSE=false
     labels:
       - "watchCat=True"
       - "watchCat.group=default"
