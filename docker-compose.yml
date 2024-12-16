@@ -9,6 +9,7 @@ services:
     environment:
       - TZ=Europe/Zurich
       - RUN_ON_STARTUP=false
+      - VERBOSE=false
     labels:
       - "watchCat=True"
       - "watchCat.group=default"

@@ -64,8 +64,9 @@ class Main:
 
 if __name__ == "__main__":
     # Configure logging
+    verbose = os.getenv("VERBOSE", "false") == "true"
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG if verbose else logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
