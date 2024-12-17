@@ -1,7 +1,7 @@
 name: Dockerize and Publish on DockerHub
 on:
   push:
-    branches: [ main ]
+    tags: [ 'v*' ] # Trigger only on tags like v1.0.0, v2.1, etc.
 
 jobs:
   build-container:
@@ -23,7 +23,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 4: Build and push multi-arch image
+      # Step 4: Extract tag name
+      - name: Extract tag
+        id: extract_tag
+        run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      # Step 5: Build and push multi-arch image
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
@@ -32,9 +37,9 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: |
             mrinterbugs/watchcat:latest
-            mrinterbugs/watchcat:${{ github.run_number }}
+            mrinterbugs/watchcat:${{ env.tag }}
 
-      # Step 5: Update Docker Hub repository description
+      # Step 6: Update Docker Hub repository description
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
         with:

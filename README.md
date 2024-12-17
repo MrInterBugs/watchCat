@@ -1,5 +1,8 @@
 # watch cat
 
+
+*This project is originally created by [Salero](https://github.com/Salero-tech). Forked and maintained with updates.*
+
 Tired of checking if your docker containers are up to date manually? Watch cat checks all specified containers periodically for updates from the registry and notifies you.
 
 
@@ -23,7 +26,7 @@ Tired of checking if your docker containers are up to date manually? Watch cat c
     wget https://raw.githubusercontent.com/Salero-tech/watchCat/main/docker-compose.yml
     ```
 
-    Optionally set the value of the environment variable `RUN_ON_STARTUP` to true to enable run on startup. 
+    Optionally set the value of the environment variable `RUN_ON_STARTUP` to true to enable run on startup or `VERBOSE` to true for more output.
 
  2. Create config folder & download config file [example config](examples/config.yml):
 
