@@ -1,6 +1,6 @@
 services:
   watchCat:
-    image: salero33/watchcat:latest
+    image: mrinterbugs/watchcat:latest
     container_name: watchCat
     restart: unless-stopped
     volumes:
