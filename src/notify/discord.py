@@ -66,19 +66,19 @@ class DiscordNotify:
                 webhook = DiscordWebhook(
                     url=webhook_url, content=self.configMap[group].get("onUpdate", "")
                 )
-                embed = DiscordEmbed(title="Update available!", color="03b2f8")
+                embed = DiscordEmbed(title="🚀 Update Available!", color="03b2f8")
 
                 for container in self.containerList:
                     if group in container.groups:
                         try:
                             embed.add_embed_field(
-                                name="Name:", value=container.name, inline=False
-                            )
-                            embed.add_embed_field(
-                                name="ID:", value=container.idShort, inline=False
-                            )
-                            embed.add_embed_field(
-                                name="Image:", value=container.imageName, inline=False
+                                name="🛠 **Container Details**",
+                                value=(
+                                    f"**Name:** `{container.name}`\n"
+                                    f"**ID:** `{container.idShort}`\n"
+                                    f"**Image:** `{container.imageName}`"
+                                ),
+                                inline=False,
                             )
                             groupHasContainer = True
                         except Exception as e:
