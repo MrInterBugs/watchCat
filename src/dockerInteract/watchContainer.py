@@ -54,7 +54,7 @@ class WatchContainer:
             )
 
         # Check if update is available
-        self.update = repo_id_remote != repo_id_local
+        self.update = repo_id_remote != repoIdLocal
         return self.update
 
     def toDict (self):

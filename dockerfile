@@ -3,7 +3,7 @@ FROM python:3.13-alpine
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-RUN useradd -m -u 1000 watchcat
+RUN adduser -S -u 1000 watchcat
 WORKDIR /home/watchcat
 
 COPY src/requirements.txt ./requirements.txt
