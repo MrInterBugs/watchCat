@@ -29,7 +29,9 @@ class Notify:
                 self.discord.addContainer(container)
                 self.mail.addContainer(container)
             except Exception as e:
-                logging.error(f"Error adding container '{container.name}' to notifications: {e}")
+                logging.error(
+                    f"Error adding container '{container.name}' to notifications: {e}"
+                )
 
         try:
             self.discord.send()

@@ -63,7 +63,9 @@ class MailNotify:
 
     def send(self) -> None:
         if not self.configMap:
-            logging.warning("No mail configurations available. Skipping send operation.")
+            logging.warning(
+                "No mail configurations available. Skipping send operation."
+            )
             return
 
         htmlListItems = []

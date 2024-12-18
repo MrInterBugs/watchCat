@@ -6,7 +6,9 @@ class WatchContainer:
     container: docker.models.containers.Container
     client: docker.DockerClient
 
-    def __init__(self, container: docker.models.containers.Container, client: docker.DockerClient) -> None:
+    def __init__(
+        self, container: docker.models.containers.Container, client: docker.DockerClient
+    ) -> None:
         self.container = container
         self.client = client
 
@@ -42,7 +44,9 @@ class WatchContainer:
             img_reg = self.client.images.get_registry_data(self.imageName)
             repo_id_remote = img_reg.id
         except docker.errors.APIError as e:
-            logging.error(f"Failed to fetch registry data for image {self.imageName}: {e}")
+            logging.error(
+                f"Failed to fetch registry data for image {self.imageName}: {e}"
+            )
             return False
 
         return repo_id_remote != repo_id_local

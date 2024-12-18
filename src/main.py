@@ -13,7 +13,9 @@ CONFIG_FILE_PATH = "/usr/src/config/config.yml"
 class Main:
     def __init__(self) -> None:
         self.loadConfigFile()
-        schedule.every(self.configInterval["every"]).day.at(self.configInterval["time"]).do(self.run)
+        schedule.every(self.configInterval["every"]).day.at(
+            self.configInterval["time"]
+        ).do(self.run)
 
     def loop(self) -> None:
         while True:

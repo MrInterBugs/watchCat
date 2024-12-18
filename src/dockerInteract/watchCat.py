@@ -23,4 +23,8 @@ class WatchCat:
                 self.monitoredContainers.append(WatchContainer(container, self.client))
 
     def getContainersWithUpdates(self) -> list[WatchContainer]:
-        return [container for container in self.monitoredContainers if container.isUpdateAvailable()]
+        return [
+            container
+            for container in self.monitoredContainers
+            if container.isUpdateAvailable()
+        ]

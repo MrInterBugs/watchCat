@@ -18,11 +18,15 @@ class DiscordNotify:
 
     def addContainer(self, container: WatchContainer) -> None:
         if not self.configMap:
-            logging.warning("No Discord configurations available. Cannot add container.")
+            logging.warning(
+                "No Discord configurations available. Cannot add container."
+            )
             return
 
         if any(c.idShort == container.idShort for c in self.containerList):
-            logging.debug(f"Container '{container.name}' already in the list. Skipping.")
+            logging.debug(
+                f"Container '{container.name}' already in the list. Skipping."
+            )
             return
 
         self.containerList.append(container)
@@ -30,7 +34,9 @@ class DiscordNotify:
 
     def send(self) -> None:
         if not self.configMap:
-            logging.warning("No Discord configurations available. Skipping send operation.")
+            logging.warning(
+                "No Discord configurations available. Skipping send operation."
+            )
             return
 
         if not self.containerList:
@@ -43,7 +49,9 @@ class DiscordNotify:
                 logging.error(f"No webhook URL configured for group '{group}'.")
                 continue
 
-            webhook = DiscordWebhook(url=webhook_url, content=config.get("onUpdate", ""))
+            webhook = DiscordWebhook(
+                url=webhook_url, content=config.get("onUpdate", "")
+            )
             embed = DiscordEmbed(title="🚀 Update Available!", color="03b2f8")
 
             groupHasContainer = False
@@ -69,7 +77,9 @@ class DiscordNotify:
                     if response.status_code == 200:
                         logging.debug(f"Successfully sent update for group '{group}'.")
                     else:
-                        logging.error(f"Failed to send update for group '{group}'. HTTP Status: {response.status_code}")
+                        logging.error(
+                            f"Failed to send update for group '{group}'. HTTP Status: {response.status_code}"
+                        )
                 except Exception as e:
                     logging.error(f"Error sending webhook for group '{group}': {e}")
 
