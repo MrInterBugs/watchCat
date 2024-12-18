@@ -3,8 +3,7 @@ FROM python:3.13-alpine
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-RUN useradd -m -u 1000 watchcat
-WORKDIR /home/watchcat
+WORKDIR /usr/src/
 
 COPY src/requirements.txt ./requirements.txt
 RUN python3 -m pip install --root-user-action=ignore --no-cache-dir --upgrade pip && \

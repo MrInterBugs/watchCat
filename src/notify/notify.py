@@ -1,30 +1,23 @@
 from dockerInteract.watchContainer import WatchContainer
-from notify.group import Group
+from notify.discord import DiscordNotify
+from notify.mail import MailNotify
+
 
 class Notify:
-    groups:dict[str,Group] = {}
+    discord: DiscordNotify
+    mail: MailNotify
 
     def __init__(self, config) -> None:
         self.setupGroups(config)
 
-    def setupGroups (self, config):
-        for group in config:
-            self.groups[group] = Group(group, config[group])
+    def setupGroups(self, config):
+        self.discord = DiscordNotify(config)
+        self.mail = MailNotify(config)
 
-
-
-    def sendNotifications (self, containers:list[WatchContainer]):
-        #add containers to their groups
+    def sendNotifications(self, containers: WatchContainer):
         for container in containers:
-            for group in container.groups:
-                if group in self.groups:
-                    self.groups[group].addContainer(container)
-                else:
-                    print(f"group {group} not found, continuing")
+            self.discord.addContainer(container)
+            self.mail.addContainer(container)
 
-        #sending notifications
-        for group in self.groups:
-            self.groups[group].send()
-
-        
-            
+        self.discord.send()
+        self.mail.send()

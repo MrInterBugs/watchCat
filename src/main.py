@@ -3,30 +3,44 @@ from dockerInteract.watchContainer import WatchContainer
 from notify.notify import Notify
 import schedule
 import time
+import yaml
 import os
 import logging
-import fileSystem
+
+CONFIG_FILE_PATH = "/usr/src/config/config.yml"
+
 
 class Main:
-    config = {}
     def __init__(self) -> None:
-        fileSystem.init()
-        #loadconfig
-        self.config = fileSystem.loadConfigFile()
-        #set up scheduel for running periodically
-        schedule.every(self.configInterval["every"]).day.at(self.configInterval["time"]).do(self.run)
-    
-    def loop (self):
+        self.loadConfigFile()
+
+        # Set up schedule for running periodically
+        schedule.every(self.configInterval["every"]).day.at(
+            self.configInterval["time"]
+        ).do(self.run)
+
+    def loop(self):
         while True:
-            #reload config
-            self.config = fileSystem.loadConfigFile()
             schedule.run_pending()
             # Sleep until next job
             time.sleep(schedule.idle_seconds())
-    
-    def run (self):
-        print("start scan now")
-        #version check of containers
+            # Reload config
+            self.loadConfigFile()
+
+    def loadConfigFile(self):
+        # Check if config file exists
+        if not os.path.exists(CONFIG_FILE_PATH):
+            logging.error("Config file not found at %s", CONFIG_FILE_PATH)
+            exit(1)
+
+        # Load YAML config
+        with open(CONFIG_FILE_PATH, "r") as file:
+            self.config = yaml.safe_load(file)
+        logging.info("Configuration file loaded successfully.")
+
+    def run(self):
+        logging.info("Starting scan now.")
+        # Version check of containers
         cat = WatchCat()
         cat.getMonitoredContainers()
         updatableList: list[WatchContainer] = cat.getContainersWithUpdates()

@@ -36,12 +36,20 @@ class WatchContainer:
     def isUpdateAvailable(self) -> bool:
         # Local image
         img = self.container.image
-        try:
-            repoIdLocal = img.attrs["RepoDigests"][0].split("@")[1]
-        except:
-            print(f"unable to find repository for: {self.imageName}")
+
+        # Check if the local image has RepoDigests
+        repo_digests = img.attrs.get("RepoDigests")
+        if not repo_digests:
+            # No RepoDigests means the image is likely built locally
             self.update = False
             return self.update
+
+        # Check if the image has tags
+        if not img.tags:
+            self.update = False
+            return self.update
+
+        repo_id_local = repo_digests[0].split("@")[1]
 
         # Remote image
         try:
@@ -57,16 +65,5 @@ class WatchContainer:
         self.update = repo_id_remote != repo_id_local
         return self.update
 
-    def toDict (self):
-        dataDict = {}
-
-        #adding all data to a dict
-        dataDict["name"] = self.name
-        dataDict["idShort"] = self.idShort
-        dataDict["imageName"] = self.imageName
-        dataDict["groups"] = self.groups
-
-        return dataDict
-
-    def __str__ (self):
-        return f"{self.name}, {self.idShort}, {self.isUpdateAvilable()}"
+    def __str__(self):
+        return f"{self.name}, {self.idShort}, {self.isUpdateAvailable()}"
