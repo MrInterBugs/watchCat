@@ -13,61 +13,48 @@ CONFIG_FILE_PATH = "/usr/src/config/config.yml"
 class Main:
     def __init__(self) -> None:
         self.loadConfigFile()
+        schedule.every(self.configInterval["every"]).day.at(self.configInterval["time"]).do(self.run)
 
-        # Set up schedule for running periodically
-        schedule.every(self.configInterval["every"]).day.at(
-            self.configInterval["time"]
-        ).do(self.run)
-
-    def loop(self):
+    def loop(self) -> None:
         while True:
             schedule.run_pending()
-            # Sleep until next job
             time.sleep(schedule.idle_seconds())
-            # Reload config
             self.loadConfigFile()
 
-    def loadConfigFile(self):
-        # Check if config file exists
+    def loadConfigFile(self) -> None:
         if not os.path.exists(CONFIG_FILE_PATH):
             logging.error("Config file not found at %s", CONFIG_FILE_PATH)
             exit(1)
 
-        # Load YAML config
         with open(CONFIG_FILE_PATH, "r") as file:
             self.config = yaml.safe_load(file)
         logging.info("Configuration file loaded successfully.")
 
-    def run(self):
+    def run(self) -> None:
         logging.info("Starting scan now.")
-        # Version check of containers
         cat = WatchCat()
         cat.getMonitoredContainers()
         updatableList: list[WatchContainer] = cat.getContainersWithUpdates()
 
-        # All containers up to date?
-        if len(updatableList) == 0:
+        if not updatableList:
             logging.info("No containers to update.")
             return
 
         logging.info("Sending notifications.")
-        # Notify for updates
         notify = Notify(self.configNotify)
         notify.sendNotifications(updatableList)
 
-    # Data
     @property
-    def configNotify(self):
+    def configNotify(self) -> dict:
         return self.config["notification"]
 
     @property
-    def configInterval(self):
+    def configInterval(self) -> dict:
         return self.config["interval"]
 
 
 if __name__ == "__main__":
-    # Configure logging
-    verbose = os.getenv("VERBOSE", "false") == "true"
+    verbose = os.getenv("VERBOSE", "false").lower() == "true"
     logging.basicConfig(
         level=logging.DEBUG if verbose else logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
@@ -76,7 +63,6 @@ if __name__ == "__main__":
 
     main = Main()
 
-    # Check if RUN_ON_STARTUP environment variable is set to "true"
     if os.getenv("RUN_ON_STARTUP", "false").lower() == "true":
         main.run()
 
