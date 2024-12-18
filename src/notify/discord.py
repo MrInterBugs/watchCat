@@ -86,6 +86,9 @@ class DiscordNotify:
                                 f"Error adding container fields to embed: {e}"
                             )
 
+                # Add a final footer line with a cat emoji
+                embed.set_footer(text="Powered by WatchCat 🐱")
+
                 if groupHasContainer:
                     try:
                         webhook.add_embed(embed)
